@@ -3,8 +3,8 @@ from typing import List, Optional
 import pandas as pd
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-from starlette.responses import JSONResponse
 
 from app.recommend.custom import RecommendCustom
 from app.recommend.diet import RecommendDiet
