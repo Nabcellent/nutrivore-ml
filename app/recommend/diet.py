@@ -1,6 +1,7 @@
 from random import uniform as rnd
 
 from app.image_finder.image_finder import get_images_links
+from app.utils.enums import ExerciseEnum
 from model import recommend, output_recommended_recipes
 
 
@@ -44,8 +45,7 @@ class RecommendDiet:
         return bmr
 
     def calories_calculator(self):
-        activities = ['little/no exercise', 'light exercise', 'moderate exercise (3-5 days/wk)',
-                      'very active (6-7 days/wk)', 'extra active (very active & physical job)']
+        activities = [el.value for el in ExerciseEnum]
         weights = [1.2, 1.375, 1.55, 1.725, 1.9]
         weight = weights[activities.index(self.activity)]
         maintain_calories = self.calculate_bmr() * weight

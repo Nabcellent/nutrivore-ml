@@ -94,7 +94,7 @@ def predict_diet(req: DietPrediction):
                                'dinner': 0.20}
 
     weights = [1, 0.9, 0.8, 0.6]
-    plans = ["maintain weight", "mild weight loss", "weight loss", "extreme weight loss"]
+    plans = [el.value for el in WeightLossPlanEnum]
     weight_loss_plan = weights[plans.index(req.weight_loss_plan.value)]
 
     diet = RecommendDiet(
