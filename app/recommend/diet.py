@@ -75,6 +75,7 @@ class RecommendDiet:
                 'n_neighbors': no_of_recommendations,
                 'return_distance': False
             })
+
             recommended_recipes = output_recommended_recipes(recommendation_dataframe)
             recommendations.append(recommended_recipes)
         for recommendation in recommendations:

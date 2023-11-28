@@ -1,3 +1,4 @@
+from re import sub
 from typing import List, Optional
 
 import pandas as pd
@@ -21,7 +22,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -45,21 +46,21 @@ async def validation_exception_handler(_, exc):
 
 
 class Recipe(BaseModel):
-    Name: str
-    CookTime: str | int
-    PrepTime: str | int
-    TotalTime: str | int
-    RecipeIngredientParts: list[str]
-    Calories: float
-    FatContent: float
-    SaturatedFatContent: float
-    CholesterolContent: float
-    SodiumContent: float
-    CarbohydrateContent: float
-    FiberContent: float
-    SugarContent: float
-    ProteinContent: float
-    RecipeInstructions: list[str]
+    name: str
+    cook_time: str | int
+    prep_time: str | int
+    total_time: str | int
+    recipe_ingredient_parts: list[str]
+    calories: float
+    fat_content: float
+    saturated_fat_content: float
+    cholesterol_content: float
+    sodium_content: float
+    carbohydrate_content: float
+    fiber_content: float
+    sugar_content: float
+    protein_content: float
+    recipe_instructions: list[str]
 
 
 class PredictionOut(BaseModel):
@@ -75,7 +76,7 @@ class DietPrediction(BaseModel):
     meals_per_day: int = Field(ge=3, le=5)
     weight_loss_plan: WeightLossPlanEnum
     ingredients: list[str] = []
-    no_of_recommendations: int = Field(3, ge=0, le=10)
+    no_of_recommendations: int = Field(3, gt=0, le=10)
 
 
 class CustomPrediction(BaseModel):
@@ -89,12 +90,31 @@ class CustomPrediction(BaseModel):
     sugar: int = Field(ge=0, le=40)
     protein: int = Field(ge=0, le=40)
     ingredients: list[str] = []
-    no_of_recommendations: int = Field(3, ge=0, le=10)
+    no_of_recommendations: int = Field(3, gt=0, le=10)
 
 
 @app.get("/")
 def home():
     return {"health_check": "OK"}
+
+
+# Define a function to convert a string to snake case
+def snake_case(s):
+    # Replace hyphens with spaces, then apply regular expression substitutions for title case conversion
+    # and add an underscore between words, finally convert the result to lowercase
+    return '_'.join(
+        sub('([A-Z][a-z]+)', r' \1',
+            sub('([A-Z]+)', r' \1',
+                s.replace('-', ' '))).split()).lower()
+
+
+def convert_keys_to_snake_case(data):
+    if isinstance(data, list):
+        return [convert_keys_to_snake_case(item) for item in data]
+    elif isinstance(data, dict):
+        return {snake_case(key): convert_keys_to_snake_case(value) for key, value in data.items()}
+    else:
+        return data
 
 
 @app.post("/api/predict-diet/", response_model=PredictionOut)
@@ -123,7 +143,7 @@ def predict_diet(req: DietPrediction):
 
     recommendations = diet.generate_recommendations(req.ingredients, req.no_of_recommendations)
 
-    return {"data": recommendations}
+    return {"data": convert_keys_to_snake_case(recommendations)}
 
 
 @app.post("/api/predict-custom/", response_model=PredictionOut)
@@ -134,4 +154,4 @@ def predict_custom(req: CustomPrediction):
     custom = RecommendCustom(nutrition_values_list)
     recommendations = custom.generate_recommendations(req.ingredients, req.no_of_recommendations)
 
-    return {"data": recommendations}
+    return {"data": convert_keys_to_snake_case(recommendations)}
