@@ -77,9 +77,9 @@ class RecommendDiet:
             })
 
             recommended_recipes = output_recommended_recipes(recommendation_dataframe)
-            recommendations.append(recommended_recipes)
+            recommendations.append({"meal": meal, "recipes": recommended_recipes})
         for recommendation in recommendations:
-            for recipe in recommendation:
+            for recipe in recommendation['recipes']:
                 recipe['image_link'] = get_images_links(recipe['Name'])
 
         return recommendations

@@ -6,11 +6,11 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
 
 from app.recommend.custom import RecommendCustom
 from app.recommend.diet import RecommendDiet
-from app.utils.enums import GenderEnum, ExerciseEnum, WeightLossPlanEnum
+from app.utils.enums import WeightLossPlanEnum
+from app.utils.models import FoodPredictionResponse, DietPredictionRequest, CustomPredictionRequest, Recipe
 
 dataset = pd.read_csv('data/dataset.csv', compression='gzip')
 app = FastAPI()
@@ -45,54 +45,6 @@ async def validation_exception_handler(_, exc):
     )
 
 
-class Recipe(BaseModel):
-    name: str
-    cook_time: str | int
-    prep_time: str | int
-    total_time: str | int
-    recipe_ingredient_parts: list[str]
-    calories: float
-    fat_content: float
-    saturated_fat_content: float
-    cholesterol_content: float
-    sodium_content: float
-    carbohydrate_content: float
-    fiber_content: float
-    sugar_content: float
-    protein_content: float
-    recipe_instructions: list[str]
-
-
-class PredictionOut(BaseModel):
-    data: Optional[List[List[Recipe]] | List[Recipe]] = None
-
-
-class DietPrediction(BaseModel):
-    age: int = Field(ge=2, le=120)
-    height: int = Field(ge=50, le=300)
-    weight: int = Field(ge=10, le=300)
-    gender: GenderEnum
-    exercise: ExerciseEnum
-    meals_per_day: int = Field(ge=3, le=5)
-    weight_loss_plan: WeightLossPlanEnum
-    ingredients: list[str] = []
-    no_of_recommendations: int = Field(3, gt=0, le=10)
-
-
-class CustomPrediction(BaseModel):
-    calories: int = Field(ge=0, le=2000)
-    fat: int = Field(ge=0, le=100)
-    saturated_fat: int = Field(ge=0, le=13)
-    cholesterol: int = Field(ge=0, le=300)
-    sodium: int = Field(ge=0, le=2300)
-    carbohydrate: int = Field(ge=0, le=325)
-    fibre: int = Field(ge=0, le=50)
-    sugar: int = Field(ge=0, le=40)
-    protein: int = Field(ge=0, le=40)
-    ingredients: list[str] = []
-    no_of_recommendations: int = Field(3, gt=0, le=10)
-
-
 @app.get("/")
 def home():
     return {"health_check": "OK"}
@@ -117,8 +69,8 @@ def convert_keys_to_snake_case(data):
         return data
 
 
-@app.post("/api/predict-diet/", response_model=PredictionOut)
-def predict_diet(req: DietPrediction):
+@app.post("/api/predict-diet/", response_model=FoodPredictionResponse)
+def predict_diet(req: DietPredictionRequest):
     if req.meals_per_day == 3:
         meals_calories_perc = {'breakfast': 0.35, 'lunch': 0.40, 'dinner': 0.25}
     elif req.meals_per_day == 4:
@@ -146,8 +98,8 @@ def predict_diet(req: DietPrediction):
     return {"data": convert_keys_to_snake_case(recommendations)}
 
 
-@app.post("/api/predict-custom/", response_model=PredictionOut)
-def predict_custom(req: CustomPrediction):
+@app.post("/api/predict-custom/", response_model=FoodPredictionResponse)
+def predict_custom(req: CustomPredictionRequest):
     nutrition_values_list = [req.calories, req.fat, req.saturated_fat, req.cholesterol, req.sodium,
                              req.carbohydrate, req.fibre, req.sugar, req.protein]
 
