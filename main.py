@@ -1,6 +1,3 @@
-from re import sub
-from typing import List, Optional
-
 import pandas as pd
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
@@ -10,7 +7,8 @@ from fastapi.responses import JSONResponse
 from app.recommend.custom import RecommendCustom
 from app.recommend.diet import RecommendDiet
 from app.utils.enums import WeightLossPlanEnum
-from app.utils.models import FoodPredictionResponse, DietPredictionRequest, CustomPredictionRequest, Recipe
+from app.utils.helpers import convert_keys_to_snake_case
+from app.utils.models import FoodPredictionResponse, DietPredictionRequest, CustomPredictionRequest
 
 dataset = pd.read_csv('data/dataset.csv', compression='gzip')
 app = FastAPI()
@@ -48,25 +46,6 @@ async def validation_exception_handler(_, exc):
 @app.get("/")
 def home():
     return {"health_check": "OK"}
-
-
-# Define a function to convert a string to snake case
-def snake_case(s):
-    # Replace hyphens with spaces, then apply regular expression substitutions for title case conversion
-    # and add an underscore between words, finally convert the result to lowercase
-    return '_'.join(
-        sub('([A-Z][a-z]+)', r' \1',
-            sub('([A-Z]+)', r' \1',
-                s.replace('-', ' '))).split()).lower()
-
-
-def convert_keys_to_snake_case(data):
-    if isinstance(data, list):
-        return [convert_keys_to_snake_case(item) for item in data]
-    elif isinstance(data, dict):
-        return {snake_case(key): convert_keys_to_snake_case(value) for key, value in data.items()}
-    else:
-        return data
 
 
 @app.post("/api/predict-diet/", response_model=FoodPredictionResponse)
