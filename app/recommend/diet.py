@@ -44,8 +44,8 @@ class RecommendDiet:
         return bmr
 
     def calories_calculator(self):
-        activities = ['Little/no exercise', 'Light exercise', 'Moderate exercise (3-5 days/wk)',
-                      'Very active (6-7 days/wk)', 'Extra active (very active & physical job)']
+        activities = ['little/no exercise', 'light exercise', 'moderate exercise (3-5 days/wk)',
+                      'very active (6-7 days/wk)', 'extra active (very active & physical job)']
         weights = [1.2, 1.375, 1.55, 1.725, 1.9]
         weight = weights[activities.index(self.activity)]
         maintain_calories = self.calculate_bmr() * weight

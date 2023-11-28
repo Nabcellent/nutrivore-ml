@@ -12,15 +12,15 @@ class GenderEnum(enum.Enum):
 
 
 class ExerciseEnum(enum.Enum):
-    LittleNoExercise = 'Little/no exercise'
-    LittleExercise = 'Light exercise'
-    ModerateExercise = 'Moderate exercise (3-5 days/wk)'
-    VeryActive = 'Very active (6-7 days/wk)'
-    ExtraActive = 'Extra active (very active & physical job)'
+    LittleNoExercise = 'little/no exercise'
+    LittleExercise = 'light exercise'
+    ModerateExercise = 'moderate exercise (3-5 days/wk)'
+    VeryActive = 'very active (6-7 days/wk)'
+    ExtraActive = 'extra active (very active & physical job)'
 
 
 class WeightLossPlanEnum(enum.Enum):
-    Maintain = 'Maintain weight'
-    MildLoss = 'Mild weight loss'
-    Loss = 'Weight loss'
-    ExtremeLoss = 'Extreme weight loss'
+    Maintain = 'maintain weight'
+    MildLoss = 'mild weight loss'
+    Loss = 'weight loss'
+    ExtremeLoss = 'extreme weight loss'
