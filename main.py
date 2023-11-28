@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 
 from app.recommend.custom import RecommendCustom
 from app.recommend.diet import RecommendDiet
-from app.utils.enums import GenderEnum, ActivityEnum, WeightLossPlanEnum
+from app.utils.enums import GenderEnum, ExerciseEnum, WeightLossPlanEnum
 
 dataset = pd.read_csv('data/dataset.csv', compression='gzip')
 app = FastAPI()
@@ -57,7 +57,7 @@ class DietPrediction(BaseModel):
     height: int = Field(ge=50, le=300)
     weight: int = Field(ge=10, le=300)
     gender: GenderEnum
-    activity: ActivityEnum
+    exercise: ExerciseEnum
     meals_per_day: int = Field(ge=3, le=5)
     weight_loss_plan: WeightLossPlanEnum
     ingredients: list[str] = []
@@ -102,7 +102,7 @@ def predict_diet(req: DietPrediction):
         req.height,
         req.weight,
         req.gender.value,
-        req.activity.value,
+        req.exercise.value,
         meals_calories_perc,
         weight_loss_plan
     )

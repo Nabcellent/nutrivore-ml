@@ -7,11 +7,11 @@ class PredictionType(enum.Enum):
 
 
 class GenderEnum(enum.Enum):
-    M = 'Male'
-    F = 'Female'
+    M = 'male'
+    F = 'female'
 
 
-class ActivityEnum(enum.Enum):
+class ExerciseEnum(enum.Enum):
     LittleNoExercise = 'Little/no exercise'
     LittleExercise = 'Light exercise'
     ModerateExercise = 'Moderate exercise (3-5 days/wk)'

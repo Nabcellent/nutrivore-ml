@@ -37,7 +37,7 @@ class RecommendDiet:
         return bmi_string, category, color
 
     def calculate_bmr(self):
-        if self.gender == 'Male':
+        if self.gender == 'male':
             bmr = 10 * self.weight + 6.25 * self.height - 5 * self.age + 5
         else:
             bmr = 10 * self.weight + 6.25 * self.height - 5 * self.age - 161
