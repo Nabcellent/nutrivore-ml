@@ -3,6 +3,7 @@ from typing import List, Optional
 import pandas as pd
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
@@ -12,6 +13,19 @@ from app.utils.enums import GenderEnum, ExerciseEnum, WeightLossPlanEnum
 
 dataset = pd.read_csv('data/dataset.csv', compression='gzip')
 app = FastAPI()
+
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.exception_handler(RequestValidationError)
@@ -83,7 +97,7 @@ def home():
     return {"health_check": "OK"}
 
 
-@app.post("/predict-diet/", response_model=PredictionOut)
+@app.post("/api/predict-diet/", response_model=PredictionOut)
 def predict_diet(req: DietPrediction):
     if req.meals_per_day == 3:
         meals_calories_perc = {'breakfast': 0.35, 'lunch': 0.40, 'dinner': 0.25}
@@ -112,7 +126,7 @@ def predict_diet(req: DietPrediction):
     return {"data": recommendations}
 
 
-@app.post("/predict-custom/", response_model=PredictionOut)
+@app.post("/api/predict-custom/", response_model=PredictionOut)
 def predict_custom(req: CustomPrediction):
     nutrition_values_list = [req.calories, req.fat, req.saturated_fat, req.cholesterol, req.sodium,
                              req.carbohydrate, req.fibre, req.sugar, req.protein]
