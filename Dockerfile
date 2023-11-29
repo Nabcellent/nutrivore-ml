@@ -1,10 +1,9 @@
 # Backend/Dockerfile
-FROM python:3.10.8
+FROM python:3.11.5
 
 RUN mkdir -p app
 
 COPY requirements.txt app/requirements.txt
-COPY data app/Data
 
 COPY . app
 
