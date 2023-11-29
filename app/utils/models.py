@@ -7,6 +7,7 @@ from app.utils.enums import GenderEnum, ExerciseEnum, WeightLossPlanEnum
 
 class Recipe(BaseModel):
     name: str
+    image_link: str
     cook_time: str | int
     prep_time: str | int
     total_time: str | int
