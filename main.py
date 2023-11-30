@@ -11,6 +11,7 @@ from app.utils.models import FoodPredictionResponse, DietPredictionRequest, Cust
 
 app = FastAPI()
 
+
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(_, exc):
     errors = []
@@ -32,7 +33,7 @@ def home():
     return {"health_check": "OK"}
 
 
-@app.post("/api/predict-diet/", response_model=FoodPredictionResponse)
+@app.post("/api/predict-diet", response_model=FoodPredictionResponse)
 def predict_diet(req: DietPredictionRequest):
     if req.meals_per_day == 3:
         meals_calories_perc = {'breakfast': 0.35, 'lunch': 0.40, 'dinner': 0.25}
@@ -61,7 +62,7 @@ def predict_diet(req: DietPredictionRequest):
     return {"data": convert_keys_to_snake_case(recommendations)}
 
 
-@app.post("/api/predict-custom/", response_model=FoodPredictionResponse)
+@app.post("/api/predict-custom", response_model=FoodPredictionResponse)
 def predict_custom(req: CustomPredictionRequest):
     nutrition_values_list = [req.calories, req.fat, req.saturated_fat, req.cholesterol, req.sodium,
                              req.carbohydrate, req.fibre, req.sugar, req.protein]
