@@ -11,21 +11,6 @@ from app.utils.models import FoodPredictionResponse, DietPredictionRequest, Cust
 
 app = FastAPI()
 
-origins = [
-    "http://localhost",
-    "http://localhost:3000",
-    "https://nutrivore-web-dkuvi4xfka-uc.a.run.app",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(_, exc):
     errors = []
@@ -85,3 +70,18 @@ def predict_custom(req: CustomPredictionRequest):
     recommendations = custom.generate_recommendations(req.ingredients, req.no_of_recommendations)
 
     return {"data": convert_keys_to_snake_case(recommendations)}
+
+
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "https://nutrivore-web-dkuvi4xfka-uc.a.run.app",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
