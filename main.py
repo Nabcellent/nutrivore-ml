@@ -75,7 +75,6 @@ def predict_custom(req: CustomPredictionRequest):
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
