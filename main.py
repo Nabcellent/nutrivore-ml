@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from starlette.middleware.cors import CORSMiddleware
 
 from app.recommend.custom import RecommendCustom
 from app.recommend.diet import RecommendDiet
@@ -10,6 +10,18 @@ from app.utils.helpers import convert_keys_to_snake_case
 from app.utils.models import FoodPredictionResponse, DietPredictionRequest, CustomPredictionRequest
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost",
+        "http://localhost:3000",
+        "https://nutrivore-web-dkuvi4xfka-uc.a.run.app",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.exception_handler(RequestValidationError)
@@ -71,11 +83,3 @@ def predict_custom(req: CustomPredictionRequest):
     recommendations = custom.generate_recommendations(req.ingredients, req.no_of_recommendations)
 
     return {"data": convert_keys_to_snake_case(recommendations)}
-
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
