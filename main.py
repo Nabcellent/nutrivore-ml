@@ -10,7 +10,6 @@ from app.utils.enums import WeightLossPlanEnum
 from app.utils.helpers import convert_keys_to_snake_case
 from app.utils.models import FoodPredictionResponse, DietPredictionRequest, CustomPredictionRequest
 
-dataset = pd.read_csv('data/dataset.csv', compression='gzip')
 app = FastAPI()
 
 origins = [
