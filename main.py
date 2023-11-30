@@ -72,15 +72,9 @@ def predict_custom(req: CustomPredictionRequest):
     return {"data": convert_keys_to_snake_case(recommendations)}
 
 
-origins = [
-    "http://localhost",
-    "http://localhost:3000",
-    "https://nutrivore-web-dkuvi4xfka-uc.a.run.app",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
