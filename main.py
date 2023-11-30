@@ -15,6 +15,7 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:3000",
+    "https://nutrivore-web-dkuvi4xfka-uc.a.run.app",
 ]
 
 app.add_middleware(
