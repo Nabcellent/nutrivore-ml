@@ -60,13 +60,13 @@ class CustomPredictionRequest(BaseModel):
 
 
 class CustomPredictionKERequest(BaseModel):
-    carbohydrate: int = Field(ge=0, le=325)
-    energy: int = Field(ge=0, le=2000)
+    carbohydrate: int = Field(ge=0, le=100)
+    energy: int = Field(ge=0, le=4000)
     fat: int = Field(ge=0, le=100)
-    fibre: int = Field(ge=0, le=50)
-    iron: int = Field(ge=0, le=40)
-    protein: int = Field(ge=0, le=40)
-    vitamin_a: int = Field(ge=0, le=40)
-    zinc: int = Field(ge=0, le=40)
+    fibre: int = Field(ge=0, le=12)
+    iron: int = Field(ge=0, le=20)
+    protein: int = Field(ge=0, le=50)
+    vitamin_a: int = Field(ge=0, le=200)
+    zinc: int = Field(ge=0, le=10)
     ingredients: list[str] = []
     no_of_recommendations: int = Field(3, gt=0, le=10)
