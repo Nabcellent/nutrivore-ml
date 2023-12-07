@@ -13,13 +13,11 @@ router = APIRouter()
 
 @router.post("/predict/ke/custom")
 def predict_custom_ke(req: CustomPredictionKERequest):
-    values = [req.carbohydrate, req.energy, req.fat, req.fibre, req.iron, req.protein, req.vitamin_a, req.zinc]
+    values = [req.energy, req.fat, req.carbohydrate, req.protein, req.fibre, req.vitamin_a, req.iron, req.zinc]
 
     ctrl = RecommendationController(values)
 
     recommendations = ctrl.recommend(req.ingredients, req.no_of_recommendations)
-
-    print(recommendations)
 
     return {"data": recommendations}
 
