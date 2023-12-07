@@ -21,10 +21,6 @@ def init_server():
         allow_headers=["*"],
     )
 
-    @app.get("/")
-    def home():
-        return {"health_check": "OK"}
-
     app.include_router(api.router, prefix='/api', tags=['API'])
 
     return app
@@ -47,3 +43,8 @@ async def validation_exception_handler(_, exc):
         status_code=422,
         content={"message": f'{errors[0]["loc"][1]}: {errors[0]["msg"]}', "errors": errors},
     )
+
+
+@server.get("/")
+def home():
+    return {"health_check": "OK"}
