@@ -2,7 +2,7 @@ from random import uniform as rnd
 
 from app.image_finder.image_finder import get_images_links
 from app.utils.enums import ExerciseEnum
-from model import recommend, output_recommended_recipes
+from app.models.general import recommend, output_recommended_recipes
 
 
 class RecommendDiet:

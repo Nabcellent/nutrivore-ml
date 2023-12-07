@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from app.controllers.recommendation_controller import RecommendationController
 from app.recommend.custom import RecommendCustom
 from app.recommend.diet import RecommendDiet
 from app.utils.enums import WeightLossPlanEnum
@@ -12,8 +13,15 @@ router = APIRouter()
 
 @router.post("/predict/ke/custom")
 def predict_custom_ke(req: CustomPredictionKERequest):
-    print(req)
-    return {"data"}
+    values = [req.carbohydrate, req.energy, req.fat, req.fibre, req.iron, req.protein, req.vitamin_a, req.zinc]
+
+    ctrl = RecommendationController(values)
+
+    recommendations = ctrl.recommend(req.ingredients, req.no_of_recommendations)
+
+    print(recommendations)
+
+    return {"data": recommendations}
 
 
 @router.post("/predict-diet", response_model=FoodPredictionResponse)
@@ -53,4 +61,4 @@ def predict_custom(req: CustomPredictionRequest):
     custom = RecommendCustom(nutrition_values_list)
     recommendations = custom.generate_recommendations(req.ingredients, req.no_of_recommendations)
 
-    return {"data": convert_keys_to_snake_case(recommendations) }
+    return {"data": convert_keys_to_snake_case(recommendations)}
