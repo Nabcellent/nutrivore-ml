@@ -15,7 +15,7 @@ class RecommendationController:
 
         recommendations = self.model.output_recommended_recipes(recommendation_dataframe)
 
-        if recommendations is not None:
+        if recommendations:
             for recipe in recommendations:
                 recipe['image_link'] = get_images_links(recipe['name'])
 
