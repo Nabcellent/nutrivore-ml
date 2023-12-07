@@ -47,6 +47,7 @@ def extract_ingredient_filtered_data(dataframe, ingredients):
 
 
 def apply_pipeline(pipeline, _input, extracted_data):
+    print(pipeline)
     _input = np.array(_input).reshape(1, -1)
 
     return extracted_data.iloc[pipeline.transform(_input)[0]]

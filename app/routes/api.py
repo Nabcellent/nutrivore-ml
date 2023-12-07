@@ -4,9 +4,16 @@ from app.recommend.custom import RecommendCustom
 from app.recommend.diet import RecommendDiet
 from app.utils.enums import WeightLossPlanEnum
 from app.utils.helpers import convert_keys_to_snake_case
-from app.utils.models import FoodPredictionResponse, DietPredictionRequest, CustomPredictionRequest
+from app.utils.models import FoodPredictionResponse, DietPredictionRequest, CustomPredictionRequest, \
+    CustomPredictionKERequest
 
 router = APIRouter()
+
+
+@router.post("/predict/ke/custom")
+def predict_custom_ke(req: CustomPredictionKERequest):
+    print(req)
+    return {"data"}
 
 
 @router.post("/predict-diet", response_model=FoodPredictionResponse)
@@ -46,4 +53,4 @@ def predict_custom(req: CustomPredictionRequest):
     custom = RecommendCustom(nutrition_values_list)
     recommendations = custom.generate_recommendations(req.ingredients, req.no_of_recommendations)
 
-    return {"data": convert_keys_to_snake_case(recommendations)}
+    return {"data": convert_keys_to_snake_case(recommendations) }
