@@ -24,6 +24,26 @@ class Recipe(BaseModel):
     recipe_instructions: list[str]
 
 
+class RecipeKE(BaseModel):
+    name: str
+    category: str
+    description: str
+    image_link: str
+    cook_time: str | int
+    prep_time: str | int
+    serves: str | int
+    ingredients: list[str]
+    instructions: list[str]
+    energy: float
+    fat: float
+    carbohydrates: float
+    vitamin_a: float
+    fibre: float
+    protein: float
+    iron: float
+    zinc: float
+
+
 class DietResponse(BaseModel):
     meal: str
     recipes: List[Recipe]
@@ -31,6 +51,10 @@ class DietResponse(BaseModel):
 
 class FoodPredictionResponse(BaseModel):
     data: Optional[List[DietResponse | Recipe]] = None
+
+
+class FoodPredictionKEResponse(BaseModel):
+    data: Optional[List[RecipeKE]] = None
 
 
 class DietPredictionRequest(BaseModel):

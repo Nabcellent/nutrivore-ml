@@ -6,12 +6,12 @@ from app.recommend.diet import RecommendDiet
 from app.utils.enums import WeightLossPlanEnum
 from app.utils.helpers import convert_keys_to_snake_case
 from app.utils.models import FoodPredictionResponse, DietPredictionRequest, CustomPredictionRequest, \
-    CustomPredictionKERequest
+    CustomPredictionKERequest, FoodPredictionKEResponse
 
 router = APIRouter()
 
 
-@router.post("/predict/ke/custom")
+@router.post("/predict/ke/custom", response_model=FoodPredictionKEResponse)
 def predict_custom_ke(req: CustomPredictionKERequest):
     values = [req.energy, req.fat, req.carbohydrate, req.protein, req.fibre, req.vitamin_a, req.iron, req.zinc]
 
