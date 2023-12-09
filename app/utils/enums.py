@@ -11,7 +11,7 @@ class GenderEnum(enum.Enum):
     F = 'female'
 
 
-class ExerciseEnum(enum.Enum):
+class ActivityEnum(enum.Enum):
     LittleNoExercise = 'no exercise'
     LittleExercise = 'light exercise'
     ModerateExercise = 'moderate exercise (3-5 days/wk)'

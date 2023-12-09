@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from app.utils.enums import GenderEnum, ExerciseEnum, WeightLossPlanEnum
+from app.utils.enums import GenderEnum, ActivityEnum, WeightLossPlanEnum
 
 
 class Recipe(BaseModel):
@@ -46,15 +46,11 @@ class RecipeKE(BaseModel):
 
 class DietResponse(BaseModel):
     meal: str
-    recipes: List[Recipe]
+    recipes: List[Recipe | RecipeKE]
 
 
 class FoodPredictionResponse(BaseModel):
-    data: Optional[List[DietResponse | Recipe]] = None
-
-
-class FoodPredictionKEResponse(BaseModel):
-    data: Optional[List[RecipeKE]] = None
+    data: Optional[List[DietResponse | Recipe | RecipeKE]] = None
 
 
 class DietPredictionRequest(BaseModel):
@@ -62,7 +58,7 @@ class DietPredictionRequest(BaseModel):
     height: int = Field(ge=50, le=300)
     weight: int = Field(ge=10, le=300)
     gender: GenderEnum
-    exercise: ExerciseEnum
+    activity: ActivityEnum
     meals_per_day: int = Field(ge=3, le=5)
     weight_loss_plan: WeightLossPlanEnum
     ingredients: list[str] = []

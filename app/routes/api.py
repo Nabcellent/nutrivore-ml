@@ -6,18 +6,35 @@ from app.recommend.diet import RecommendDiet
 from app.utils.enums import WeightLossPlanEnum
 from app.utils.helpers import convert_keys_to_snake_case
 from app.utils.models import FoodPredictionResponse, DietPredictionRequest, CustomPredictionRequest, \
-    CustomPredictionKERequest, FoodPredictionKEResponse
+    CustomPredictionKERequest
 
 router = APIRouter()
 
 
-@router.post("/predict/ke/custom", response_model=FoodPredictionKEResponse)
+@router.post("/predict/ke/custom", response_model=FoodPredictionResponse)
 def predict_custom_ke(req: CustomPredictionKERequest):
     values = [req.energy, req.fat, req.carbohydrate, req.protein, req.fibre, req.vitamin_a, req.iron, req.zinc]
 
-    ctrl = RecommendationController(values)
+    ctrl = RecommendationController(req.ingredients, req.no_of_recommendations)
 
-    recommendations = ctrl.recommend(req.ingredients, req.no_of_recommendations)
+    recommendations = ctrl.recommend_custom(values)
+
+    return {"data": recommendations}
+
+
+@router.post("/predict/ke/diet", response_model=FoodPredictionResponse)
+def predict_diet_ke(req: DietPredictionRequest):
+    ctrl = RecommendationController(req.ingredients, req.no_of_recommendations)
+
+    recommendations = ctrl.recommend_diet(
+        req.age,
+        req.height,
+        req.weight,
+        req.gender.value,
+        req.activity.value,
+        req.weight_loss_plan.value,
+        req.meals_per_day
+    )
 
     return {"data": recommendations}
 
@@ -41,7 +58,7 @@ def predict_diet(req: DietPredictionRequest):
         req.height,
         req.weight,
         req.gender.value,
-        req.exercise.value,
+        req.activity.value,
         meals_calories_percent,
         weight_loss_plan
     )

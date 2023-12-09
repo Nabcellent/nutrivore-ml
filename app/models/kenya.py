@@ -29,12 +29,12 @@ class KenyaModel:
 
         return pipeline
 
-    def apply_pipeline(self, pipeline, _input, extracted_data):
-        _input = np.array(_input).reshape(1, -1)
+    def apply_pipeline(self, pipeline, extracted_data):
+        _input = np.array(self._input).reshape(1, -1)
 
         return extracted_data[pipeline.transform(_input)[0]]
 
-    def recommend(self, _input, ingredients, params):
+    def recommend(self, ingredients, params):
         data = self.dataset
 
         if len(ingredients) > 0:
@@ -47,7 +47,7 @@ class KenyaModel:
         neigh = self.nn_predictor(prep_data)
         pipeline = self.build_pipeline(neigh, scaler, params)
 
-        return self.apply_pipeline(pipeline, _input, data)
+        return self.apply_pipeline(pipeline, data)
 
     def output_recommended_recipes(self, dataframe):
         if dataframe is not None:
