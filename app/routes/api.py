@@ -15,18 +15,18 @@ router = APIRouter()
 def predict_custom_ke(req: CustomPredictionKERequest):
     values = [req.energy, req.fat, req.carbohydrate, req.protein, req.fibre, req.vitamin_a, req.iron, req.zinc]
 
-    ctrl = RecommendationController(req.ingredients, req.no_of_recommendations)
+    recommender = RecommendationController(req.ingredients, req.no_of_recommendations)
 
-    recommendations = ctrl.recommend_custom(values)
+    recommendations = recommender.recommend_custom(values)
 
     return {"data": recommendations}
 
 
 @router.post("/predict/ke/diet", response_model=FoodPredictionResponse)
 def predict_diet_ke(req: DietPredictionRequest):
-    ctrl = RecommendationController(req.ingredients, req.no_of_recommendations)
+    recommender = RecommendationController(req.ingredients, req.no_of_recommendations)
 
-    recommendations = ctrl.recommend_diet(
+    recommendations = recommender.recommend_diet(
         req.age,
         req.height,
         req.weight,
