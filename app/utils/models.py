@@ -34,7 +34,7 @@ class RecipeKE(BaseModel):
     serves: str | int
     ingredients: list[str]
     instructions: list[str]
-    energy: float
+    calories: float
     fat: float
     carbohydrates: float
     vitamin_a: float
@@ -80,8 +80,8 @@ class CustomPredictionRequest(BaseModel):
 
 
 class CustomPredictionKERequest(BaseModel):
+    calories: int = Field(ge=0, le=4000)
     carbohydrate: float = Field(ge=0, le=100)
-    energy: int = Field(ge=0, le=4000)
     fat: float = Field(ge=0, le=100)
     fibre: float = Field(ge=0, le=12)
     iron: float = Field(ge=0, le=20)

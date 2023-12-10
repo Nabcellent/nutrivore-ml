@@ -7,9 +7,9 @@ from app.routes import api
 
 
 def init_server():
-    app = FastAPI(title='Nutrivore', description='Nutrivore API', version='1.0.0')
+    server = FastAPI(title='Nutrivore', description='Nutrivore API', version='1.0.0')
 
-    app.add_middleware(
+    server.add_middleware(
         CORSMiddleware,
         allow_origins=[
             "http://localhost",
@@ -21,15 +21,15 @@ def init_server():
         allow_headers=["*"],
     )
 
-    app.include_router(api.router, prefix='/api', tags=['API'])
+    server.include_router(api.router, prefix='/api', tags=['API'])
 
-    return app
-
-
-server = init_server()
+    return server
 
 
-@server.exception_handler(RequestValidationError)
+app = init_server()
+
+
+@app.exception_handler(RequestValidationError)
 async def validation_exception_handler(_, exc):
     errors = []
     for error in exc.errors():
@@ -45,6 +45,6 @@ async def validation_exception_handler(_, exc):
     )
 
 
-@server.get("/")
+@app.get("/")
 def home():
     return {"health_check": "OK"}

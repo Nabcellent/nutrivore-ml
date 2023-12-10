@@ -15,26 +15,28 @@ class RecommendationController:
         plans = [el.value for el in WeightLossPlanEnum]
         weight_loss = weights[plans.index(weight_loss_plan)]
         total_calories = weight_loss * self.calories_calculator(activity, gender, weight, height, age)
-        meals = ['breakfast', 'morning snack', 'lunch', 'afternoon snack', 'dinner']
+        meals = {'breakfast': 0.30, 'morning snack': 0.05, 'lunch': 0.40, 'afternoon snack': 0.05, 'dinner': 0.20}
 
         if meals_per_day == 3:
-            meals = ['breakfast', 'lunch', 'dinner']
+            meals = {'breakfast': 0.35, 'lunch': 0.40, 'dinner': 0.25}
         elif meals_per_day == 4:
-            meals = ['breakfast', 'morning snack', 'lunch', 'dinner']
+            meals = {'breakfast': 0.30, 'morning snack': 0.05, 'lunch': 0.40, 'dinner': 0.25}
 
         recommendations = []
         for meal in meals:
+            calories = meals[meal] * total_calories
+
             if meal == 'breakfast':
-                values = [rnd(1672, 2510), rnd(14, 21), rnd(30, 75), rnd(20, 100), rnd(4, 10),
+                values = [calories, rnd(14, 21), rnd(30, 75), rnd(20, 100), rnd(4, 10),
                           rnd(100, 200), rnd(2.2, 3.3), rnd(1, 4)]
             elif meal == 'lunch':
-                values = [total_calories, rnd(18, 25), rnd(30, 75), rnd(40, 175), rnd(4, 20),
+                values = [calories, rnd(18, 25), rnd(30, 75), rnd(40, 175), rnd(4, 20),
                           rnd(100, 200), rnd(2.75, 3.85), rnd(1, 4)]
             elif meal == 'dinner':
-                values = [rnd(2508, 3348), rnd(20, 40), rnd(30, 75), rnd(40, 175), rnd(4, 20),
+                values = [calories, rnd(20, 40), rnd(30, 75), rnd(40, 175), rnd(4, 20),
                           rnd(100, 200), rnd(3.3, 4.4), rnd(1, 4)]
             else:
-                values = [rnd(1000, 2000), rnd(10, 30), rnd(30, 75), rnd(20, 100), rnd(4, 10),
+                values = [calories, rnd(10, 30), rnd(30, 75), rnd(20, 100), rnd(4, 10),
                           rnd(100, 200), rnd(2.2, 3.3), rnd(1, 4)]
 
             model = KenyaModel(values)
