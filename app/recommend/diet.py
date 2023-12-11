@@ -1,8 +1,8 @@
 from random import uniform as rnd
 
 from app.image_finder.image_finder import get_images_links
-from app.utils.enums import ExerciseEnum
-from model import recommend, output_recommended_recipes
+from app.utils.enums import ActivityEnum
+from app.models.general import recommend, output_recommended_recipes
 
 
 class RecommendDiet:
@@ -45,10 +45,11 @@ class RecommendDiet:
         return bmr
 
     def calories_calculator(self):
-        activities = [el.value for el in ExerciseEnum]
+        activities = [el.value for el in ActivityEnum]
         weights = [1.2, 1.375, 1.55, 1.725, 1.9]
         weight = weights[activities.index(self.activity)]
         maintain_calories = self.calculate_bmr() * weight
+
         return maintain_calories
 
     def generate_recommendations(self, ingredients, no_of_recommendations):
@@ -61,7 +62,7 @@ class RecommendDiet:
             if meal == 'breakfast':
                 recommended_nutrition = [meal_calories, rnd(10, 30), rnd(0, 4), rnd(0, 30), rnd(0, 400), rnd(40, 75),
                                          rnd(4, 10), rnd(0, 10), rnd(30, 100)]
-            elif meal == 'launch':
+            elif meal == 'lunch':
                 recommended_nutrition = [meal_calories, rnd(20, 40), rnd(0, 4), rnd(0, 30), rnd(0, 400), rnd(40, 75),
                                          rnd(4, 20), rnd(0, 10), rnd(50, 175)]
             elif meal == 'dinner':
@@ -78,6 +79,7 @@ class RecommendDiet:
 
             recommended_recipes = output_recommended_recipes(recommendation_dataframe)
             recommendations.append({"meal": meal, "recipes": recommended_recipes})
+
         for recommendation in recommendations:
             for recipe in recommendation['recipes']:
                 recipe['image_link'] = get_images_links(recipe['Name'])
