@@ -41,7 +41,9 @@ def predict_diet_ke(req: DietPredictionRequest):
 
 @router.post("/predict-diet", response_model=FoodPredictionResponse)
 def predict_diet(req: DietPredictionRequest):
-    if req.meals_per_day == 3:
+    if req.meals_per_day == 2:
+        meals_calories_percent = {'breakfast': 0.40, 'early dinner': 0.30}
+    elif req.meals_per_day == 3:
         meals_calories_percent = {'breakfast': 0.35, 'lunch': 0.40, 'dinner': 0.25}
     elif req.meals_per_day == 4:
         meals_calories_percent = {'breakfast': 0.30, 'morning snack': 0.05, 'lunch': 0.40, 'dinner': 0.25}

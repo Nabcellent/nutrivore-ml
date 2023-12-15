@@ -17,7 +17,9 @@ class RecommendationController:
         total_calories = weight_loss * self.calories_calculator(activity, gender, weight, height, age)
         meals = {'breakfast': 0.30, 'morning snack': 0.05, 'lunch': 0.40, 'afternoon snack': 0.05, 'dinner': 0.20}
 
-        if meals_per_day == 3:
+        if meals_per_day == 2:
+            meals = {'breakfast': 0.40, 'early dinner': 0.30}
+        elif meals_per_day == 3:
             meals = {'breakfast': 0.35, 'lunch': 0.40, 'dinner': 0.25}
         elif meals_per_day == 4:
             meals = {'breakfast': 0.30, 'morning snack': 0.05, 'lunch': 0.40, 'dinner': 0.25}
