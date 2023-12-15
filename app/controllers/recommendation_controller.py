@@ -11,18 +11,18 @@ class RecommendationController:
         self.no_of_recommendations = no_of_recommendations
 
     def recommend_diet(self, age, height, weight, gender, activity, weight_loss_plan, meals_per_day):
-        weights = [1, 0.9, 0.8, 0.6]
+        weights = [1.1, 1, 0.9, 0.8, 0.6]
         plans = [el.value for el in WeightLossPlanEnum]
         weight_loss = weights[plans.index(weight_loss_plan)]
         total_calories = weight_loss * self.calories_calculator(activity, gender, weight, height, age)
-        meals = {'breakfast': 0.30, 'morning snack': 0.05, 'lunch': 0.40, 'afternoon snack': 0.05, 'dinner': 0.20}
+        meals = {'breakfast': 0.3, 'morning snack': 0.05, 'lunch': 0.4, 'afternoon snack': 0.05, 'dinner': 0.2}
 
         if meals_per_day == 2:
-            meals = {'breakfast': 0.40, 'early dinner': 0.30}
+            meals = {'breakfast': 0.6, 'early dinner': 0.4}
         elif meals_per_day == 3:
-            meals = {'breakfast': 0.35, 'lunch': 0.40, 'dinner': 0.25}
+            meals = {'breakfast': 0.35, 'lunch': 0.4, 'dinner': 0.25}
         elif meals_per_day == 4:
-            meals = {'breakfast': 0.30, 'morning snack': 0.05, 'lunch': 0.40, 'dinner': 0.25}
+            meals = {'breakfast': 0.3, 'morning snack': 0.1, 'lunch': 0.4, 'dinner': 0.2}
 
         recommendations = []
         for meal in meals:

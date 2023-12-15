@@ -20,6 +20,7 @@ class ActivityEnum(enum.Enum):
 
 
 class WeightLossPlanEnum(enum.Enum):
+    Gain = 'gain weight'
     Maintain = 'maintain weight'
     MildLoss = 'mild weight loss'
     Loss = 'weight loss'
