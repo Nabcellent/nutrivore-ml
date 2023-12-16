@@ -25,3 +25,12 @@ class WeightLossPlanEnum(enum.Enum):
     MildLoss = 'mild weight loss'
     Loss = 'weight loss'
     ExtremeLoss = 'extreme weight loss'
+
+
+class Meal(enum.Enum):
+    Breakfast = 'breakfast'
+    MorningSnack = 'morning snack'
+    Lunch = 'lunch'
+    AfternoonSnack = 'afternoon snack'
+    EarlyDinner = 'early dinner'
+    Dinner = 'dinner'
