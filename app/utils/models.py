@@ -59,7 +59,7 @@ class DietPredictionRequest(BaseModel):
     weight: int = Field(ge=10, le=300)
     gender: GenderEnum
     activity: ActivityEnum
-    meals_per_day: int = Field(ge=3, le=5)
+    meals_per_day: int = Field(ge=2, le=5)
     weight_loss_plan: WeightLossPlanEnum
     ingredients: list[str] = []
     no_of_recommendations: int = Field(3, gt=0, le=10)

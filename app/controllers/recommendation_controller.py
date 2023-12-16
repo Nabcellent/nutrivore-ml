@@ -1,8 +1,8 @@
-from random import uniform as rnd
+from random import uniform as rnd, randint
 
 from app.image_finder.image_finder import get_images_links
 from app.models.kenya import KenyaModel
-from app.utils.enums import ActivityEnum, WeightLossPlanEnum
+from app.utils.enums import ActivityEnum, WeightLossPlanEnum, Meal
 
 
 class RecommendationController:
@@ -11,43 +11,53 @@ class RecommendationController:
         self.no_of_recommendations = no_of_recommendations
 
     def recommend_diet(self, age, height, weight, gender, activity, weight_loss_plan, meals_per_day):
-        weights = [1, 0.9, 0.8, 0.6]
+        weights = [1.1, 1, 0.9, 0.8, 0.6]
         plans = [el.value for el in WeightLossPlanEnum]
         weight_loss = weights[plans.index(weight_loss_plan)]
         total_calories = weight_loss * self.calories_calculator(activity, gender, weight, height, age)
-        meals = {'breakfast': 0.30, 'morning snack': 0.05, 'lunch': 0.40, 'afternoon snack': 0.05, 'dinner': 0.20}
+        meals = {
+            Meal.Breakfast: 0.3,
+            Meal.MorningSnack: 0.05,
+            Meal.Lunch: 0.4,
+            Meal.AfternoonSnack: 0.05,
+            Meal.Dinner: 0.2
+        }
 
-        if meals_per_day == 3:
-            meals = {'breakfast': 0.35, 'lunch': 0.40, 'dinner': 0.25}
+        if meals_per_day == 2:
+            meals = {Meal.Breakfast: 0.6, Meal.EarlyDinner: 0.4}
+        elif meals_per_day == 3:
+            meals = {Meal.Breakfast: 0.35, Meal.Lunch: 0.4, Meal.Dinner: 0.25}
         elif meals_per_day == 4:
-            meals = {'breakfast': 0.30, 'morning snack': 0.05, 'lunch': 0.40, 'dinner': 0.25}
+            meals = {Meal.Breakfast: 0.3, Meal.MorningSnack: 0.1, Meal.Lunch: 0.4, Meal.Dinner: 0.2}
 
         recommendations = []
         for meal in meals:
             calories = meals[meal] * total_calories
 
-            if meal == 'breakfast':
-                values = [calories, rnd(14, 21), rnd(30, 75), rnd(20, 100), rnd(4, 10),
-                          rnd(100, 200), rnd(2.2, 3.3), rnd(1, 4)]
-            elif meal == 'lunch':
-                values = [calories, rnd(18, 25), rnd(30, 75), rnd(40, 175), rnd(4, 20),
-                          rnd(100, 200), rnd(2.75, 3.85), rnd(1, 4)]
-            elif meal == 'dinner':
-                values = [calories, rnd(20, 40), rnd(30, 75), rnd(40, 175), rnd(4, 20),
-                          rnd(100, 200), rnd(3.3, 4.4), rnd(1, 4)]
+            if meal == Meal.Breakfast:
+                values = [calories, rnd(14, 35), rnd(10, 75), rnd(20, 50), rnd(2, 10),
+                          rnd(30, 200), rnd(2.2, 20), rnd(1, 7)]
+            elif meal == Meal.Lunch:
+                values = [calories, rnd(18, 35), rnd(10, 75), rnd(40, 90), rnd(2, 20),
+                          rnd(30, 200), rnd(2.75, 18), rnd(1, 7)]
+            elif meal == Meal.Dinner:
+                values = [calories, rnd(20, 40), rnd(10, 75), rnd(40, 90), rnd(2, 20),
+                          rnd(30, 200), rnd(3.3, 16), rnd(1, 7)]
             else:
-                values = [calories, rnd(10, 30), rnd(30, 75), rnd(20, 100), rnd(4, 10),
-                          rnd(100, 200), rnd(2.2, 3.3), rnd(1, 4)]
+                values = [calories, rnd(10, 35), rnd(10, 75), rnd(20, 50), rnd(2, 10),
+                          rnd(30, 200), rnd(2.2, 14), rnd(1, 7)]
 
-            model = KenyaModel(values)
+            model = KenyaModel([v / randint(2, 4) for v in values])
 
             recommendation_dataframe = model.recommend(self.ingredients, {
                 'n_neighbors': self.no_of_recommendations,
                 'return_distance': False
-            })
+            }, meal)
 
             recommended_recipes = model.output_recommended_recipes(recommendation_dataframe)
-            recommendations.append({"meal": meal, "recipes": recommended_recipes})
+
+            if recommended_recipes:
+                recommendations.append({"meal": meal, "recipes": recommended_recipes})
 
         for recommendation in recommendations:
             for recipe in recommendation['recipes']:
@@ -65,9 +75,8 @@ class RecommendationController:
 
         recommendations = model.output_recommended_recipes(recommendation_dataframe)
 
-        if recommendations:
-            for recipe in recommendations:
-                recipe['image_link'] = get_images_links(recipe['name'])
+        for recipe in recommendations:
+            recipe['image_link'] = get_images_links(recipe['name'])
 
         return recommendations
 

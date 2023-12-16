@@ -41,15 +41,17 @@ def predict_diet_ke(req: DietPredictionRequest):
 
 @router.post("/predict-diet", response_model=FoodPredictionResponse)
 def predict_diet(req: DietPredictionRequest):
-    if req.meals_per_day == 3:
-        meals_calories_percent = {'breakfast': 0.35, 'lunch': 0.40, 'dinner': 0.25}
+    if req.meals_per_day == 2:
+        meals_calories_percent = {'breakfast': 0.6, 'early dinner': 0.4}
+    elif req.meals_per_day == 3:
+        meals_calories_percent = {'breakfast': 0.35, 'lunch': 0.4, 'dinner': 0.25}
     elif req.meals_per_day == 4:
-        meals_calories_percent = {'breakfast': 0.30, 'morning snack': 0.05, 'lunch': 0.40, 'dinner': 0.25}
+        meals_calories_percent = {'breakfast': 0.3, 'morning snack': 0.05, 'lunch': 0.4, 'dinner': 0.25}
     else:
-        meals_calories_percent = {'breakfast': 0.30, 'morning snack': 0.05, 'lunch': 0.40, 'afternoon snack': 0.05,
+        meals_calories_percent = {'breakfast': 0.3, 'morning snack': 0.05, 'lunch': 0.4, 'afternoon snack': 0.05,
                                   'dinner': 0.20}
 
-    weights = [1, 0.9, 0.8, 0.6]
+    weights = [1.1, 1, 0.9, 0.8, 0.6]
     plans = [el.value for el in WeightLossPlanEnum]
     weight_loss_plan = weights[plans.index(req.weight_loss_plan.value)]
 

@@ -4,11 +4,13 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, StandardScaler
 
+from app.utils.enums import Meal
+
 
 class KenyaModel:
     dataset = pl.read_csv('data/ke-recipes.csv').fill_nan(None)
 
-    def __init__(self, values):
+    def __init__(self, values: list):
         self._input = values
 
     def scaling(self, dataframe):
@@ -34,11 +36,17 @@ class KenyaModel:
 
         return extracted_data[pipeline.transform(_input)[0]]
 
-    def recommend(self, ingredients, params):
-        data = self.dataset
-
+    def apply_filters(self, dataset, ingredients, meal):
         if len(ingredients) > 0:
-            data = data.filter([pl.col('ingredients').str.contains(i) for i in ingredients])
+            dataset = dataset.filter([pl.col('ingredients').str.contains(i) for i in ingredients])
+
+        if meal and 'snack' in meal.value:
+            dataset = dataset.filter([pl.col('category').str.contains('snack|desserts')])
+
+        return dataset
+
+    def recommend(self, ingredients, params, meal: Meal = None):
+        data = self.apply_filters(self.dataset, ingredients, meal)
 
         if data.shape[0] < params['n_neighbors']:
             return None
@@ -59,4 +67,4 @@ class KenyaModel:
                 recipe['instructions'] = recipe['instructions'].split(';')
 
             return output
-        return None
+        return []
