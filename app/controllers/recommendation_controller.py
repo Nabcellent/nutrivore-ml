@@ -55,7 +55,9 @@ class RecommendationController:
             }, meal)
 
             recommended_recipes = model.output_recommended_recipes(recommendation_dataframe)
-            recommendations.append({"meal": meal, "recipes": recommended_recipes})
+
+            if recommended_recipes:
+                recommendations.append({"meal": meal, "recipes": recommended_recipes})
 
         for recommendation in recommendations:
             for recipe in recommendation['recipes']:
@@ -73,9 +75,8 @@ class RecommendationController:
 
         recommendations = model.output_recommended_recipes(recommendation_dataframe)
 
-        if recommendations:
-            for recipe in recommendations:
-                recipe['image_link'] = get_images_links(recipe['name'])
+        for recipe in recommendations:
+            recipe['image_link'] = get_images_links(recipe['name'])
 
         return recommendations
 

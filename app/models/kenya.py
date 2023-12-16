@@ -67,4 +67,4 @@ class KenyaModel:
                 recipe['instructions'] = recipe['instructions'].split(';')
 
             return output
-        return None
+        return []
