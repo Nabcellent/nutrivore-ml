@@ -10,8 +10,7 @@ from app.utils.enums import Meal
 class KenyaModel:
     dataset = pl.read_csv('data/ke-recipes.csv').fill_nan(None)
 
-    def __init__(self, meal: Meal, values: list):
-        self.meal = meal
+    def __init__(self, values: list):
         self._input = values
 
     def scaling(self, dataframe):
@@ -37,17 +36,17 @@ class KenyaModel:
 
         return extracted_data[pipeline.transform(_input)[0]]
 
-    def apply_filters(self, dataset, ingredients):
+    def apply_filters(self, dataset, ingredients, meal):
         if len(ingredients) > 0:
             dataset = dataset.filter([pl.col('ingredients').str.contains(i) for i in ingredients])
 
-        if 'snack' in self.meal.value:
+        if meal and 'snack' in meal.value:
             dataset = dataset.filter([pl.col('category').str.contains('snack|desserts')])
 
         return dataset
 
-    def recommend(self, ingredients, params):
-        data = self.apply_filters(self.dataset, ingredients)
+    def recommend(self, ingredients, params, meal: Meal = None):
+        data = self.apply_filters(self.dataset, ingredients, meal)
 
         if data.shape[0] < params['n_neighbors']:
             return None

@@ -47,12 +47,12 @@ class RecommendationController:
                 values = [calories, rnd(10, 35), rnd(10, 75), rnd(20, 50), rnd(2, 10),
                           rnd(30, 200), rnd(2.2, 14), rnd(1, 7)]
 
-            model = KenyaModel(meal, [v / randint(2, 4) for v in values])
+            model = KenyaModel([v / randint(2, 4) for v in values])
 
             recommendation_dataframe = model.recommend(self.ingredients, {
                 'n_neighbors': self.no_of_recommendations,
                 'return_distance': False
-            })
+            }, meal)
 
             recommended_recipes = model.output_recommended_recipes(recommendation_dataframe)
             recommendations.append({"meal": meal, "recipes": recommended_recipes})
