@@ -86,7 +86,7 @@ class CustomPredictionKERequest(BaseModel):
     fibre: float = Field(ge=0, le=12)
     iron: float = Field(ge=0, le=20)
     protein: float = Field(ge=0, le=50)
-    vitamin_a: float = Field(ge=0, le=200)
+    vitamin_a: float = Field(ge=0, le=800)
     zinc: float = Field(ge=0, le=10)
     ingredients: list[str] = []
     no_of_recommendations: int = Field(3, gt=0, le=10)
