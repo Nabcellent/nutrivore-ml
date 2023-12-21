@@ -41,7 +41,7 @@ class KenyaModel:
             dataset = dataset.filter([pl.col('ingredients').str.contains(i) for i in ingredients])
 
         if meal and 'snack' in meal.value:
-            dataset = dataset.filter([pl.col('category').str.contains('snack|desserts')])
+            dataset = dataset.filter([pl.col('category').str.contains('snack|desserts|porridges')])
 
         return dataset
 
