@@ -15,6 +15,7 @@ def init_server():
             "http://localhost",
             "http://localhost:3000",
             "https://nutrivore-web-dkuvi4xfka-uc.a.run.app",
+            "https://nutrivore-web-tsjtei2hka-uc.a.run.app",
         ],
         allow_credentials=True,
         allow_methods=["*"],
